@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Love Anniversary</title>
+  <style>
+    :root {
+      --bg-1:rgb(168, 177, 255);
+      --bg-2:rgb(62, 205, 212);
+      --card: rgba(255, 255, 255, 0.16);
+      --text: #000000;
+      --accent:rgb(0, 0, 0);
+      --accent-dark: #f42765;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+      min-height: 100%;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    .hearts-bg::before,
+    .hearts-bg::after {
+      content: "❤ ❤ ❤ ❤ ❤ ❤ ❤ ❤";
+      position: fixed;
+      left: -10%;
+      width: 120%;
+      color: rgba(255, 255, 255, 0.12);
+      letter-spacing: 24px;
+      font-size: 26px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 0;
+      animation: drift 18s linear infinite;
+    }
+
+    .hearts-bg::after {
+      top: 50%;
+      animation-duration: 25s;
+      animation-direction: reverse;
+    }
+
+    .hearts-bg::before {
+      top: 20%;
+    }
+
+    @keyframes drift {
+      from { transform: translateX(-4%); }
+      to { transform: translateX(4%); }
+    }
+
+    .welcome-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.35));
+      backdrop-filter: blur(8px);
+      display: grid;
+      place-items: center;
+      z-index: 100;
+      padding: 20px;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    .lock-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.5));
+      backdrop-filter: blur(10px);
+      display: grid;
+      place-items: center;
+      z-index: 120;
+      padding: 20px;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    .lock-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .welcome-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .welcome-card {
+      max-width: 650px;
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 36px 24px;
+      text-align: center;
+    }
+
+    .date-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      background: rgba(255, 255, 255, 0.24);
+      margin-bottom: 16px;
+    }
+
+    h1, h2 {
+      margin: 0 0 14px 0;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 6vw, 3rem);
+    }
+
+    h2 {
+      font-size: clamp(1.4rem, 4vw, 2.1rem);
+    }
+
+    .quote {
+      margin: 0 auto 24px auto;
+      max-width: 500px;
+      font-size: 1.06rem;
+      line-height: 1.7;
+      color: #fff7fb;
+    }
+
+    .btn {
+      border: none;
+      outline: none;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 13px 24px;
+      font-weight: 700;
+      background: #fff;
+      color: var(--accent);
+      font-size: 1rem;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      background: #ffeef4;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      width: min(1100px, 92%);
+      margin: 32px auto 70px;
+      display: grid;
+      gap: 22px;
+    }
+
+    .section {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+
+    .lead {
+      margin: 0;
+      font-size: 1.06rem;
+      line-height: 1.8;
+      color: #fff8fc;
+    }
+
+    .timeline {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 16px;
+    }
+
+    .memory {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 10px;
+    }
+
+    .memory img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .memory img:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(6px);
+      display: grid;
+      place-items: center;
+      z-index: 130;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .lightbox.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: min(900px, 95vw);
+      max-height: 90vh;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .lightbox-content img {
+      display: block;
+      max-width: 100%;
+      max-height: 85vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .lightbox-caption {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 1.05rem;
+      color: #fff;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -14px;
+      right: -14px;
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 50%;
+      background: #fff;
+      color: #333;
+      font-size: 1.4rem;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .lightbox-close:hover {
+      transform: scale(1.08);
+      background: #ffeef4;
+    }
+
+    .memory-title {
+      margin: 10px 0 6px 0;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .memory-note {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.45;
+      opacity: 0.95;
+    }
+
+    .letter-box {
+      background: rgba(255, 255, 255, 0.15);
+      border-left: 4px solid #fff;
+      border-radius: 14px;
+      padding: 18px;
+      font-size: 1.07rem;
+      line-height: 1.8;
+      margin-top: 8px;
+    }
+
+    .timers {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .timer-card {
+      background: rgba(255, 255, 255, 0.14);
+      border-radius: 14px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .timer-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .surprise-wrap {
+      text-align: center;
+    }
+
+    #hiddenMessage {
+      display: none;
+      margin-top: 16px;
+      font-size: clamp(1.3rem, 5vw, 2rem);
+      font-weight: 800;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #confettiCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    .helper {
+      margin-top: 8px;
+      opacity: 0.86;
+      font-size: 0.92rem;
+    }
+
+    .pw-input {
+      width: min(280px, 90%);
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.15);
+      color: #0e0202;
+      font-size: 1rem;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .pw-input::placeholder {
+      color: rgba(255, 250, 250, 0.82);
+    }
+
+    .pw-error {
+      min-height: 20px;
+      margin-top: 10px;
+      color: #fff2f5;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body class="hearts-bg">
+  <div class="lock-overlay" id="lockOverlay">
+    <div class="welcome-card">
+      <div class="date-badge">Private Love Space</div>
+      <h1>Enter Password 🔐</h1>
+      <p class="quote">Only one heart knows this code.</p>
+      <input id="passwordInput" class="pw-input" type="password" placeholder="Enter password" maxlength="10" />
+      <br />
+      <button class="btn" id="unlockBtn">Unlock Our Story</button>
+      <p class="pw-error" id="pwError"></p>
+    </div>
+  </div>
+
+  <div class="welcome-overlay" id="welcomeOverlay">
+    <div class="welcome-card">
+      <div class="date-badge">Our Anniversary: May 29</div>
+      <h1>Happy Love Anniversary ❤️</h1>
+      <p class="quote">
+        "Every love story is beautiful, but ours is my favorite chapter of life."
+      </p>
+      <button class="btn" id="openStoryBtn">Open Our Story ❤️</button>
+      <p class="helper">Tap to start music and open your surprise page.</p>
+    </div>
+  </div>
+
+  <canvas id="confettiCanvas"></canvas>
+
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close photo">&times;</button>
+      <img id="lightboxImage" src="" alt="" />
+      <p class="lightbox-caption" id="lightboxCaption"></p>
+    </div>
+  </div>
+
+  <main>
+    <section class="section">
+      <h2>Our Memory Timeline</h2>
+      <p class="lead">From first smiles to future dreams, every moment with you is magic.</p>
+      <div class="timeline">
+        <article class="memory">
+          <img src="E:\us.jpeg" alt="First photo together" />
+          <h3 class="memory-title">First Photo Together</h3>
+          <p class="memory-note">The beginning of my favorite forever.</p>
+        </article>
+        <article class="memory">
+          <img src="e:\chat.jpeg" alt="Favorite chat screenshot" />
+          <h3 class="memory-title">Favorite Chat Screenshot</h3>
+          <p class="memory-note">Every message from you feels like a warm hug.</p>
+        </article>
+        <article class="memory">
+          <img src="e:\mee.jpeg" alt="Best moment" />
+          <h3 class="memory-title">Best Moment</h3>
+          <p class="memory-note">The day that lives in my heart on repeat.The way you hold my hand always feels special </p>
+        </article>
+        
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Love Letter</h2>
+      <p class="letter-box">
+        "You made ordinary days feel special. Thank you for being my happiness, my comfort,
+        and my favorite person. Happy Love Anniversary Babyyyy❤️We fight,we fix,we stay."
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Our Time Together</h2>
+      <div class="timers">
+        <div class="timer-card">
+          <div>Days Together</div>
+          <div class="timer-value" id="daysTogether">0</div>
+        </div>
+        <div class="timer-card">
+          <div>Next Anniversary In</div>
+          <div class="timer-value" id="nextAnniversary">0</div>
+        </div>
+      </div>
+      <p class="helper">Set your relationship start date in the script section to personalize this.</p>
+    </section>
+
+    <section class="section surprise-wrap">
+      <h2>Final Surprise</h2>
+      <button class="btn" id="surpriseBtn">Click for a Surprise 💌</button>
+      <div id="hiddenMessage">I Love You 3000 ❤️
+
+I promise you that I’ll never leave you.
+I truly hope our future becomes beautiful and filled with happiness together.
+
+My biggest wish is to spend more time with you in real life — not just through mobile screens.
+Because every moment with you feels special.
+
+Every time I see you, you give me butterflies.
+Your smile, your presence, your love… everything about you makes my heart feel warm and complete.
+
+Thank you for being part of my life.
+Happy Love Anniversary ❤️
+
+      </div>
+    </section>
+  </main>
+
+  <audio id="bgMusic" loop>
+    <source src="E:\porutham.mpeg" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    const lockOverlay = document.getElementById("lockOverlay");
+    const unlockBtn = document.getElementById("unlockBtn");
+    const passwordInput = document.getElementById("passwordInput");
+    const pwError = document.getElementById("pwError");
+    const openStoryBtn = document.getElementById("openStoryBtn");
+    const welcomeOverlay = document.getElementById("welcomeOverlay");
+    const bgMusic = document.getElementById("bgMusic");
+    const surpriseBtn = document.getElementById("surpriseBtn");
+    const hiddenMessage = document.getElementById("hiddenMessage");
+    const daysTogetherEl = document.getElementById("daysTogether");
+    const nextAnniversaryEl = document.getElementById("nextAnniversary");
+
+    // Update this to your real relationship start date: YYYY-MM-DD
+    const relationshipStartDate = new Date("2024-05-29T00:00:00");
+    const sitePassword = "4747";
+
+    function unlockIfValid() {
+      if (passwordInput.value === sitePassword) {
+        lockOverlay.classList.add("hidden");
+        pwError.textContent = "";
+        passwordInput.value = "";
+        return;
+      }
+      pwError.textContent = "Wrong password. Try again.";
+    }
+
+    unlockBtn.addEventListener("click", unlockIfValid);
+    passwordInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        unlockIfValid();
+      }
+    });
+
+    openStoryBtn.addEventListener("click", async () => {
+      welcomeOverlay.classList.add("hidden");
+      try {
+        await bgMusic.play();
+      } catch (err) {
+        // Browser may block playback if no compatible audio file is provided yet.
+      }
+    });
+
+    function updateTimers() {
+      const now = new Date();
+      const msInDay = 1000 * 60 * 60 * 24;
+
+      const togetherMs = now - relationshipStartDate;
+      const togetherDays = Math.max(0, Math.floor(togetherMs / msInDay));
+      daysTogetherEl.textContent = togetherDays;
+
+      const currentYear = now.getFullYear();
+      let nextAnniversary = new Date(currentYear, 4, 29); // May is month index 4
+      if (nextAnniversary < now) {
+        nextAnniversary = new Date(currentYear + 1, 4, 29);
+      }
+      const remainingDays = Math.ceil((nextAnniversary - now) / msInDay);
+      nextAnniversaryEl.textContent = remainingDays;
+    }
+
+    updateTimers();
+    setInterval(updateTimers, 1000 * 60 * 60);
+
+    surpriseBtn.addEventListener("click", () => {
+      hiddenMessage.style.display = "block";
+      launchConfetti();
+    });
+
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImage = document.getElementById("lightboxImage");
+    const lightboxCaption = document.getElementById("lightboxCaption");
+    const lightboxClose = document.getElementById("lightboxClose");
+
+    function openLightbox(img) {
+      lightboxImage.src = img.src;
+      lightboxImage.alt = img.alt;
+      const title = img.closest(".memory")?.querySelector(".memory-title");
+      lightboxCaption.textContent = title ? title.textContent : img.alt;
+      lightbox.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove("open");
+      lightboxImage.src = "";
+      document.body.style.overflow = "";
+    }
+
+    document.querySelectorAll(".memory img").forEach((img) => {
+      img.addEventListener("click", () => openLightbox(img));
+    });
+
+    lightboxClose.addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) {
+        closeLightbox();
+      }
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && lightbox.classList.contains("open")) {
+        closeLightbox();
+      }
+    });
+
+    function launchConfetti() {
+      const canvas = document.getElementById("confettiCanvas");
+      const ctx = canvas.getContext("2d");
+      const particles = [];
+      const colors = ["#ffffff", "#ffd1dc", "#ff5f8f", "#ffe08a", "#c7b8ff"];
+      const total = 180;
+
+      const resize = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      };
+      resize();
+
+      for (let i = 0; i < total; i += 1) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * -canvas.height,
+          r: 2 + Math.random() * 5,
+          c: colors[Math.floor(Math.random() * colors.length)],
+          v: 1.2 + Math.random() * 3,
+          w: (Math.random() - 0.5) * 1.2
+        });
+      }
+
+      let frames = 0;
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p) => {
+          p.y += p.v;
+          p.x += p.w;
+          if (p.y > canvas.height + 20) {
+            p.y = -10;
+          }
+          ctx.beginPath();
+          ctx.fillStyle = p.c;
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        frames += 1;
+        if (frames < 240) {
+          requestAnimationFrame(draw);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+
+      draw();
+      window.addEventListener("resize", resize, { once: true });
+    }
+  </script>
+</body>
+</html>
