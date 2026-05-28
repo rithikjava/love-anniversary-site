@@ -63,6 +63,54 @@
       to { transform: translateX(4%); }
     }
 
+    .hearts::before,
+    .hearts::after {
+      content: "❤️ ❤️ ❤️ ❤️ ❤️";
+      position: fixed;
+      width: 100%;
+      top: -50px;
+      left: 0;
+      font-size: 2rem;
+      animation: floatHearts 10s linear infinite;
+      pointer-events: none;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .hearts::after {
+      animation-delay: 5s;
+    }
+
+    @keyframes floatHearts {
+      0% {
+        transform: translateY(-10%);
+        opacity: 0;
+      }
+
+      20% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+
+    body {
+      animation: glow 5s infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        background: #5bb4da;
+      }
+
+      to {
+        background: #fad0c4;
+      }
+    }
+
     .welcome-overlay {
       position: fixed;
       inset: 0;
@@ -149,11 +197,12 @@
       background: #fff;
       color: var(--accent);
       font-size: 1rem;
-      transition: transform 0.2s ease, background 0.2s ease;
+      transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
     }
 
     .btn:hover {
-      transform: translateY(-2px);
+      transform: scale(1.08);
+      box-shadow: 0 0 20px rgba(255, 192, 203, 0.8);
       background: #ffeef4;
     }
 
@@ -203,11 +252,33 @@
       display: block;
       cursor: pointer;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 1s forwards ease;
+    }
+
+    .memory:nth-child(1) img {
+      animation-delay: 0.15s;
+    }
+
+    .memory:nth-child(2) img {
+      animation-delay: 0.45s;
+    }
+
+    .memory:nth-child(3) img {
+      animation-delay: 0.75s;
     }
 
     .memory img:hover {
       transform: scale(1.02);
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .lightbox {
@@ -400,6 +471,8 @@
     </div>
   </div>
 
+  <div class="hearts"></div>
+
   <canvas id="confettiCanvas"></canvas>
 
   <div class="lightbox" id="lightbox">
@@ -411,6 +484,7 @@
   </div>
 
   <main>
+    
     <section class="section">
       <h2>Our Memory Timeline</h2>
       <p class="lead">From first smiles to future dreams, every moment with you is magic.</p>
@@ -496,7 +570,7 @@ Happy Love Anniversary ❤️
     const nextAnniversaryEl = document.getElementById("nextAnniversary");
 
     // Update this to your real relationship start date: YYYY-MM-DD
-    const relationshipStartDate = new Date("2024-05-29T00:00:00");
+    const relationshipStartDate = new Date("2021-05-29T00:00:00");
     const sitePassword = "4747";
 
     function unlockIfValid() {
@@ -524,6 +598,10 @@ Happy Love Anniversary ❤️
         // Browser may block playback if no compatible audio file is provided yet.
       }
     });
+
+    setTimeout(() => {
+      alert("You are my favorite person forever ❤️");
+    }, 4000);
 
     function updateTimers() {
       const now = new Date();
